@@ -1,0 +1,37 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "my-msvc",
+            "inherits": "msvc",
+            "displayName": "My MSVC (custom module dir)",
+            "cacheVariables": {
+                "STD_MODULE_SOURCE_DIR": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/modules"
+            }
+        },
+        {
+            "name": "my-clang",
+            "inherits": "clang",
+            "displayName": "My Clang/libc++ (custom path)",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "/opt/llvm-21/bin/clang++"
+            }
+        },
+        {
+            "name": "my-clang-libstdc++",
+            "inherits": "clang-libstdc++",
+            "displayName": "My Clang/libstdc++ (custom path)",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "/opt/llvm-21/bin/clang++"
+            }
+        },
+        {
+            "name": "my-gcc",
+            "inherits": "gcc",
+            "displayName": "My GCC (custom path)",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "/opt/gcc-15/bin/g++"
+            }
+        }
+    ]
+}

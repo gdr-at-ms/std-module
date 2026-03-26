@@ -1,0 +1,5 @@
+# Build artifacts
+build/
+
+# User-specific CMake presets (machine-local overrides)
+CMakeUserPresets.json

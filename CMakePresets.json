@@ -1,0 +1,78 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
+    "configurePresets": [
+        {
+            "name": "_base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+                "STD_MODULE_BUILD_TESTS": "ON"
+            }
+        },
+        {
+            "name": "msvc",
+            "inherits": "_base",
+            "displayName": "MSVC (cl.exe)",
+            "description": "Build with the Microsoft Visual C++ compiler.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "cl"
+            }
+        },
+        {
+            "name": "clang-cl",
+            "inherits": "_base",
+            "displayName": "Clang-CL (MSVC-compatible)",
+            "description": "Build with clang-cl against the Microsoft STL.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            }
+        },
+        {
+            "name": "clang",
+            "inherits": "_base",
+            "displayName": "Clang (libc++)",
+            "description": "Build with clang++ and libc++.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_CXX_FLAGS": "-stdlib=libc++",
+                "CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++"
+            }
+        },
+        {
+            "name": "gcc",
+            "inherits": "_base",
+            "displayName": "GCC (libstdc++)",
+            "description": "Build with g++ and libstdc++.",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "clang-libstdc++",
+            "inherits": "_base",
+            "displayName": "Clang (libstdc++)",
+            "description": "Build with clang++ using libstdc++ (default on most Linux distros).",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        }
+    ],
+    "buildPresets": [
+        { "name": "msvc",     "configurePreset": "msvc"     },
+        { "name": "clang-cl", "configurePreset": "clang-cl" },
+        { "name": "clang",    "configurePreset": "clang"    },
+        { "name": "gcc",              "configurePreset": "gcc"              },
+        { "name": "clang-libstdc++",  "configurePreset": "clang-libstdc++"  }
+    ],
+    "testPresets": [
+        { "name": "msvc",             "configurePreset": "msvc",             "output": { "outputOnFailure": true } },
+        { "name": "clang-cl",         "configurePreset": "clang-cl",         "output": { "outputOnFailure": true } },
+        { "name": "clang",            "configurePreset": "clang",            "output": { "outputOnFailure": true } },
+        { "name": "gcc",              "configurePreset": "gcc",              "output": { "outputOnFailure": true } },
+        { "name": "clang-libstdc++",  "configurePreset": "clang-libstdc++",  "output": { "outputOnFailure": true } }
+    ]
+}

@@ -1,0 +1,25 @@
+name: Linux (GCC)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add GCC repo
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+      - name: Install toolchain
+        run: sudo apt-get install -y ninja-build g++-15
+      - name: Configure
+        run: cmake --preset gcc -DCMAKE_CXX_COMPILER=g++-15
+      - name: Build
+        run: cmake --build --preset gcc
+      - name: Test
+        run: ctest --preset gcc

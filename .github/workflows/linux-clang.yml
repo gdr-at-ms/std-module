@@ -1,0 +1,43 @@
+name: Linux (Clang)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - preset: clang
+            packages: clang-20 libc++-20-dev libc++abi-20-dev
+            cc: clang++-20
+            extra_flags: "-stdlib=libc++"
+          - preset: clang-libstdc++
+            packages: clang-20 g++-15 libstdc++-15-dev
+            cc: clang++-20
+            extra_flags: ""
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add LLVM + GCC repos
+        run: |
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm.asc > /dev/null
+          echo 'deb http://apt.llvm.org/noble/ llvm-toolchain-noble main' | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+      - name: Install toolchain
+        run: sudo apt-get install -y ninja-build ${{ matrix.packages }}
+      - name: Configure
+        run: |
+          cmake --preset ${{ matrix.preset }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.cc }} \
+            -DCMAKE_CXX_FLAGS="${{ matrix.extra_flags }}" \
+            -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.extra_flags }}"
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+      - name: Test
+        run: ctest --preset ${{ matrix.preset }}

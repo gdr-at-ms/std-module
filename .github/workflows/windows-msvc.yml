@@ -1,0 +1,20 @@
+name: Windows (MSVC)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Configure
+        run: cmake --preset msvc
+      - name: Build
+        run: cmake --build --preset msvc
+      - name: Test
+        run: ctest --preset msvc

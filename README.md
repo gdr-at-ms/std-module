@@ -1,8 +1,10 @@
 # std-module
 
-[![Windows (MSVC, clang-cl)](https://github.com/gdr-at-ms/std-module/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/ci.yml)
-[![Linux (Clang, GCC)](https://github.com/gdr-at-ms/std-module/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/ci.yml)
-[![macOS (Clang/libc++)](https://github.com/gdr-at-ms/std-module/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/ci.yml)
+[![Windows (MSVC)](https://github.com/gdr-at-ms/std-module/actions/workflows/windows-msvc.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/windows-msvc.yml)
+[![Windows (clang-cl)](https://github.com/gdr-at-ms/std-module/actions/workflows/windows-clang-cl.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/windows-clang-cl.yml)
+[![Linux (Clang)](https://github.com/gdr-at-ms/std-module/actions/workflows/linux-clang.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/linux-clang.yml)
+[![Linux (GCC)](https://github.com/gdr-at-ms/std-module/actions/workflows/linux-gcc.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/linux-gcc.yml)
+[![macOS (Clang)](https://github.com/gdr-at-ms/std-module/actions/workflows/macos.yml/badge.svg?branch=main)](https://github.com/gdr-at-ms/std-module/actions/workflows/macos.yml)
 
 Build the C++23 `std` and `std.compat` standard library modules as a reusable
 CMake target.  No experimental UUIDs, no `CMAKE_EXPERIMENTAL_*` variables — only

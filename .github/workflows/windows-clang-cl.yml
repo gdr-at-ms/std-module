@@ -1,0 +1,63 @@
+name: Windows (clang-cl)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install VS Insiders Build Tools
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri 'https://aka.ms/vs/insiders/vs_buildtools.exe' `
+            -OutFile vs_buildtools.exe
+          $p = Start-Process -Wait -PassThru -FilePath .\vs_buildtools.exe -ArgumentList `
+            '--quiet', '--wait', '--norestart', `
+            '--add', 'Microsoft.VisualStudio.Workload.VCTools', `
+            '--add', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64', `
+            '--add', 'Microsoft.VisualStudio.Component.VC.Modules.x86.x64'
+          Remove-Item vs_buildtools.exe
+          if ($p.ExitCode -notin 0, 3010) {
+            Write-Error "VS installer failed with exit code $($p.ExitCode)"
+            exit 1
+          }
+
+      - name: Install latest LLVM
+        shell: pwsh
+        run: choco install llvm -y --no-progress
+
+      - name: Set up VS Insiders environment
+        shell: pwsh
+        run: |
+          $path = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+            -prerelease -latest -products 'Microsoft.VisualStudio.Product.BuildTools' `
+            -requires 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64' `
+            -property installationPath
+          if (-not $path) {
+            Write-Error "VS Insiders Build Tools not found by vswhere"
+            exit 1
+          }
+          Write-Host "VS Insiders path: $path"
+          echo "VS_INSIDERS=$path" >> $env:GITHUB_ENV
+
+      - name: Configure
+        shell: cmd
+        run: |
+          call "%VS_INSIDERS%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          cmake --preset clang-cl
+      - name: Build
+        shell: cmd
+        run: |
+          call "%VS_INSIDERS%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          cmake --build --preset clang-cl
+      - name: Test
+        shell: cmd
+        run: |
+          call "%VS_INSIDERS%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          ctest --preset clang-cl

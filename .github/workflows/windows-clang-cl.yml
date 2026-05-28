@@ -32,25 +32,25 @@ jobs:
         shell: pwsh
         run: choco install llvm -y --no-progress
 
-      - name: Set up VS Preview environment
+      - name: Set up VS Insiders environment
         shell: pwsh
         run: |
           $path = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
             -prerelease -latest -property installationPath
-          echo "VS_PREVIEW=$path" >> $env:GITHUB_ENV
+          echo "VS_INSIDERS=$path" >> $env:GITHUB_ENV
 
       - name: Configure
         shell: cmd
         run: |
-          call "%VS_PREVIEW%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          call "%VS_INSIDERS%\VC\Auxiliary\Build\vcvarsall.bat" x64
           cmake --preset clang-cl
       - name: Build
         shell: cmd
         run: |
-          call "%VS_PREVIEW%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          call "%VS_INSIDERS%\VC\Auxiliary\Build\vcvarsall.bat" x64
           cmake --build --preset clang-cl
       - name: Test
         shell: cmd
         run: |
-          call "%VS_PREVIEW%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          call "%VS_INSIDERS%\VC\Auxiliary\Build\vcvarsall.bat" x64
           ctest --preset clang-cl

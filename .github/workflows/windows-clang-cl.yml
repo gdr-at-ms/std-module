@@ -36,7 +36,14 @@ jobs:
         shell: pwsh
         run: |
           $path = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
-            -prerelease -latest -property installationPath
+            -prerelease -latest -products 'Microsoft.VisualStudio.Product.BuildTools' `
+            -requires 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64' `
+            -property installationPath
+          if (-not $path) {
+            Write-Error "VS Insiders Build Tools not found by vswhere"
+            exit 1
+          }
+          Write-Host "VS Insiders path: $path"
           echo "VS_INSIDERS=$path" >> $env:GITHUB_ENV
 
       - name: Configure
